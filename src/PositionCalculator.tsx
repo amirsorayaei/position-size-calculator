@@ -5,6 +5,7 @@ interface Result {
   tokenAmount: number;
   positionSize: number;
   marginRequired: number;
+  leverage: number;
 }
 
 const PositionCalculator = () => {
@@ -13,6 +14,8 @@ const PositionCalculator = () => {
   const [entryPrice, setEntryPrice] = useState<number>(0);
   const [stopLossPrice, setStopLossPrice] = useState<number>(0);
   const [leverage, setLeverage] = useState<number>(10);
+  const [margin, setMargin] = useState<number>(0);
+  const [inputMode, setInputMode] = useState<"leverage" | "margin">("leverage");
   const [positionType, setPositionType] = useState<"long" | "short">("long");
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState("");
@@ -34,11 +37,6 @@ const PositionCalculator = () => {
 
     if (entryPrice <= 0 || stopLossPrice <= 0) {
       setError("Prices must be greater than zero");
-      return;
-    }
-
-    if (leverage <= 0) {
-      setError("Leverage must be greater than zero");
       return;
     }
 
@@ -66,14 +64,37 @@ const PositionCalculator = () => {
     // Calculate number of tokens
     const tokenAmount = positionSize / entryPrice;
 
-    // Calculate required margin
-    const marginRequired = positionSize / leverage;
+    let calculatedLeverage: number;
+    let marginRequired: number;
+
+    if (inputMode === "leverage") {
+      // Validate leverage input
+      if (leverage <= 0) {
+        setError("Leverage must be greater than zero");
+        return;
+      }
+      calculatedLeverage = leverage;
+      marginRequired = positionSize / leverage;
+    } else {
+      // Validate margin input
+      if (margin <= 0) {
+        setError("Margin must be greater than zero");
+        return;
+      }
+      if (margin > accountBalance) {
+        setError("Margin cannot exceed account balance");
+        return;
+      }
+      marginRequired = margin;
+      calculatedLeverage = positionSize / margin;
+    }
 
     setResult({
       riskAmount,
       tokenAmount,
       positionSize,
       marginRequired,
+      leverage: calculatedLeverage,
     });
   };
 
@@ -133,6 +154,33 @@ const PositionCalculator = () => {
             </div>
           </div>
 
+          {/** Input Mode Toggle */}
+          <div>
+            <label>Input Mode: </label>
+            <div style={{ marginTop: "5px" }}>
+              <label style={{ marginRight: "15px" }}>
+                <input
+                  type="radio"
+                  value="leverage"
+                  checked={inputMode === "leverage"}
+                  onChange={() => setInputMode("leverage")}
+                  style={{ marginRight: "5px" }}
+                />
+                Leverage
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="margin"
+                  checked={inputMode === "margin"}
+                  onChange={() => setInputMode("margin")}
+                  style={{ marginRight: "5px" }}
+                />
+                Margin
+              </label>
+            </div>
+          </div>
+
           {/** Account Balance */}
           <div>
             <label>Account Balance (USDT): </label>
@@ -173,13 +221,22 @@ const PositionCalculator = () => {
             />
           </div>
 
-          {/** Leverage */}
+          {/** Leverage or Margin Input */}
           <div>
-            <label>Leverage: </label>
+            <label>
+              {inputMode === "leverage" ? "Leverage: " : "Margin (USDT): "}
+            </label>
             <input
               type="number"
-              value={leverage}
-              onChange={(e) => setLeverage(parseInt(e.target.value) || 1)}
+              value={inputMode === "leverage" ? leverage : margin}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value) || 0;
+                if (inputMode === "leverage") {
+                  setLeverage(value);
+                } else {
+                  setMargin(value);
+                }
+              }}
               style={{
                 width: "100%",
                 padding: "8px",
@@ -301,22 +358,41 @@ const PositionCalculator = () => {
               Position Size:{" "}
               <strong>{result.positionSize.toFixed(2)} USDT</strong>
             </p>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: "bold",
-                color: "#2c3e50",
-                padding: "10px",
-                backgroundColor: "#f8f9fa",
-                borderRadius: "4px",
-                textAlign: "center",
-              }}
-            >
-              Required Margin:{" "}
-              <strong style={{ color: "#e74c3c" }}>
-                {result.marginRequired.toFixed(2)} USDT
-              </strong>
-            </p>
+            {inputMode === "leverage" ? (
+              <p
+                style={{
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  color: "#2c3e50",
+                  padding: "10px",
+                  backgroundColor: "#f8f9fa",
+                  borderRadius: "4px",
+                  textAlign: "center",
+                }}
+              >
+                Required Margin:{" "}
+                <strong style={{ color: "#e74c3c" }}>
+                  {result.marginRequired.toFixed(2)} USDT
+                </strong>
+              </p>
+            ) : (
+              <p
+                style={{
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  color: "#2c3e50",
+                  padding: "10px",
+                  backgroundColor: "#f8f9fa",
+                  borderRadius: "4px",
+                  textAlign: "center",
+                }}
+              >
+                Required Leverage:{" "}
+                <strong style={{ color: "#e74c3c" }}>
+                  {result.leverage.toFixed(2)}x
+                </strong>
+              </p>
+            )}
           </div>
         )}
       </div>
