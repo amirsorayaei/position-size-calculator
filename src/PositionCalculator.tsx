@@ -10,8 +10,8 @@ interface Result {
 const PositionCalculator = () => {
   const [accountBalance, setAccountBalance] = useState<number>(100);
   const [riskPercentage, setRiskPercentage] = useState<number>(5);
-  const [entryPrice, setEntryPrice] = useState<number>(0.02667);
-  const [stopLossPrice, setStopLossPrice] = useState<number>(0.0259);
+  const [entryPrice, setEntryPrice] = useState<number>(0);
+  const [stopLossPrice, setStopLossPrice] = useState<number>(0);
   const [leverage, setLeverage] = useState<number>(10);
   const [positionType, setPositionType] = useState<"long" | "short">("long");
   const [result, setResult] = useState<Result | null>(null);
@@ -87,7 +87,7 @@ const PositionCalculator = () => {
     >
       <div
         style={{
-          padding: "16px",
+          padding: "0 16px 16px",
           border: "1px solid #ddd",
           borderRadius: "8px",
           direction: "ltr",
@@ -105,117 +105,131 @@ const PositionCalculator = () => {
           Crypto Position Calculator
         </h2>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Account Balance (USDT): </label>
-          <input
-            type="number"
-            value={accountBalance}
-            onChange={(e) => setAccountBalance(parseFloat(e.target.value) || 0)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "5px",
-              boxSizing: "border-box",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: "15px" }}>
-          <label>Risk Percentage: </label>
-          <input
-            type="number"
-            value={riskPercentage}
-            onChange={(e) => setRiskPercentage(parseFloat(e.target.value) || 0)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "5px",
-              boxSizing: "border-box",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: "15px" }}>
-          <label>Position Type: </label>
-          <div style={{ marginTop: "5px" }}>
-            <label style={{ marginRight: "15px" }}>
-              <input
-                type="radio"
-                value="long"
-                checked={positionType === "long"}
-                onChange={() => setPositionType("long")}
-                style={{ marginRight: "5px" }}
-              />
-              Long
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="short"
-                checked={positionType === "short"}
-                onChange={() => setPositionType("short")}
-                style={{ marginRight: "5px" }}
-              />
-              Short
-            </label>
+        <div className="grid-wrapper">
+          {/** Position Type */}
+          <div>
+            <label>Position Type: </label>
+            <div style={{ marginTop: "5px" }}>
+              <label style={{ marginRight: "15px" }}>
+                <input
+                  type="radio"
+                  value="long"
+                  checked={positionType === "long"}
+                  onChange={() => setPositionType("long")}
+                  style={{ marginRight: "5px" }}
+                />
+                Long
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="short"
+                  checked={positionType === "short"}
+                  onChange={() => setPositionType("short")}
+                  style={{ marginRight: "5px" }}
+                />
+                Short
+              </label>
+            </div>
           </div>
-        </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Entry Price: </label>
-          <input
-            type="number"
-            step="0.00001"
-            value={entryPrice}
-            onChange={(e) => setEntryPrice(parseFloat(e.target.value) || 0)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "5px",
-              boxSizing: "border-box",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
-        </div>
+          {/** Account Balance */}
+          <div>
+            <label>Account Balance (USDT): </label>
+            <input
+              type="number"
+              value={accountBalance}
+              onChange={(e) =>
+                setAccountBalance(parseFloat(e.target.value) || 0)
+              }
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginTop: "5px",
+                boxSizing: "border-box",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            />
+          </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Stop Loss Price: </label>
-          <input
-            type="number"
-            step="0.00001"
-            value={stopLossPrice}
-            onChange={(e) => setStopLossPrice(parseFloat(e.target.value) || 0)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "5px",
-              boxSizing: "border-box",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
-        </div>
+          {/** Risk Percentage */}
+          <div>
+            <label>Risk Percentage %: </label>
+            <input
+              type="number"
+              value={riskPercentage}
+              onChange={(e) =>
+                setRiskPercentage(parseFloat(e.target.value) || 0)
+              }
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginTop: "5px",
+                boxSizing: "border-box",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            />
+          </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <label>Leverage: </label>
-          <input
-            type="number"
-            value={leverage}
-            onChange={(e) => setLeverage(parseInt(e.target.value) || 1)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "5px",
-              boxSizing: "border-box",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
+          {/** Leverage */}
+          <div>
+            <label>Leverage: </label>
+            <input
+              type="number"
+              value={leverage}
+              onChange={(e) => setLeverage(parseInt(e.target.value) || 1)}
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginTop: "5px",
+                boxSizing: "border-box",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            />
+          </div>
+
+          {/** Entry Price */}
+          <div>
+            <label>Entry Price: </label>
+            <input
+              type="number"
+              step="0.00001"
+              value={entryPrice}
+              onChange={(e) => setEntryPrice(parseFloat(e.target.value) || 0)}
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginTop: "5px",
+                boxSizing: "border-box",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            />
+          </div>
+
+          {/** Stop Loss Price */}
+          <div style={{ marginBottom: "20px" }}>
+            <label>Stop Loss Price: </label>
+            <input
+              type="number"
+              step="0.00001"
+              value={stopLossPrice}
+              onChange={(e) =>
+                setStopLossPrice(parseFloat(e.target.value) || 0)
+              }
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginTop: "5px",
+                boxSizing: "border-box",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            />
+          </div>
         </div>
 
         {error && (
@@ -282,9 +296,6 @@ const PositionCalculator = () => {
             <p>
               Allowed Loss Amount:{" "}
               <strong>{result.riskAmount.toFixed(2)} USDT</strong>
-            </p>
-            <p>
-              Number of Tokens: <strong>{result.tokenAmount.toFixed(2)}</strong>
             </p>
             <p>
               Position Size:{" "}
