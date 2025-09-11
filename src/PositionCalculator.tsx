@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "@/styles/Home.module.css";
 
 interface Result {
   riskAmount: number;
@@ -98,6 +99,17 @@ const PositionCalculator = () => {
     });
   };
 
+  const resetPosition = () => {
+    setAccountBalance(100);
+    setRiskPercentage(5);
+    setEntryPrice(0);
+    setStopLossPrice(0);
+    setLeverage(10);
+    setMargin(0);
+    setError("");
+    setResult(null);
+  };
+
   return (
     <div
       style={{
@@ -126,7 +138,7 @@ const PositionCalculator = () => {
           Crypto Position Calculator
         </h2>
 
-        <div className="grid-wrapper">
+        <div className={styles.gridWrapper}>
           {/** Position Type */}
           <div>
             <label>Position Type: </label>
@@ -268,7 +280,7 @@ const PositionCalculator = () => {
           </div>
 
           {/** Stop Loss Price */}
-          <div className="grid-fill" style={{ marginBottom: "20px" }}>
+          <div className={styles.gridFill} style={{ marginBottom: "20px" }}>
             <label>Stop Loss Price: </label>
             <input
               type="number"
@@ -304,29 +316,50 @@ const PositionCalculator = () => {
           </div>
         )}
 
-        <button
-          onClick={calculatePosition}
-          style={{
-            width: "100%",
-            padding: "12px",
-            backgroundColor: "#3498db",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "16px",
-            fontWeight: "bold",
-            transition: "background-color 0.3s",
-          }}
-          onMouseOver={(e) =>
-            ((e.target as HTMLButtonElement).style.backgroundColor = "#2980b9")
-          }
-          onMouseOut={(e) =>
-            ((e.target as HTMLButtonElement).style.backgroundColor = "#3498db")
-          }
-        >
-          Calculate
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <button
+            onClick={resetPosition}
+            style={{
+              width: "100%",
+              padding: "12px",
+              // backgroundColor: "#3498db",
+              color: "#3498db",
+              border: "1px solid #3498db",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "16px",
+              fontWeight: "bold",
+              transition: "background-color 0.3s",
+            }}
+          >
+            Reset
+          </button>
+          <button
+            onClick={calculatePosition}
+            style={{
+              width: "100%",
+              padding: "12px",
+              backgroundColor: "#3498db",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "16px",
+              fontWeight: "bold",
+              transition: "background-color 0.3s",
+            }}
+            onMouseOver={(e) =>
+              ((e.target as HTMLButtonElement).style.backgroundColor =
+                "#2980b9")
+            }
+            onMouseOut={(e) =>
+              ((e.target as HTMLButtonElement).style.backgroundColor =
+                "#3498db")
+            }
+          >
+            Calculate
+          </button>
+        </div>
 
         {result && (
           <div

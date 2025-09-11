@@ -1,0 +1,10 @@
+.gridWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 16px;
+  column-gap: 8px;
+}
+
+.gridFill {
+  grid-column: span 2;
+}
