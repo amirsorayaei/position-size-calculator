@@ -12,11 +12,6 @@ code {
     monospace;
 }
 
-.container {
-  width: 30rem;
-  height: 25rem;
-}
-
 label {
   font-size: 14px;
 }
@@ -25,5 +20,9 @@ label {
   display: grid;
   grid-template-columns: 1fr 1fr;
   row-gap: 16px;
-  column-gap: 16px;
+  column-gap: 8px;
+
+  .grid-fill {
+    grid-column: span 2;
+  }
 }

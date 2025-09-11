@@ -108,7 +108,7 @@ const PositionCalculator = () => {
     >
       <div
         style={{
-          padding: "0 16px 16px",
+          padding: "0 8px 8px",
           border: "1px solid #ddd",
           borderRadius: "8px",
           direction: "ltr",
@@ -268,7 +268,7 @@ const PositionCalculator = () => {
           </div>
 
           {/** Stop Loss Price */}
-          <div style={{ marginBottom: "20px" }}>
+          <div className="grid-fill" style={{ marginBottom: "20px" }}>
             <label>Stop Loss Price: </label>
             <input
               type="number"

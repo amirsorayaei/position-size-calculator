@@ -1,15 +1,9 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import PositionCalculator from "./PositionCalculator";
 import "./index.css";
 
 const root = document.createElement("div");
-root.className = "container";
 document.body.appendChild(root);
 const rootDiv = ReactDOM.createRoot(root);
 
-rootDiv.render(
-  <React.StrictMode>
-    <PositionCalculator />
-  </React.StrictMode>
-);
+rootDiv.render(<PositionCalculator />);
