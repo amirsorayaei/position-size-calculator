@@ -1,0 +1,29 @@
+.main {
+  padding: 0 16px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  direction: ltr;
+  text-align: left;
+  background-color: #f9f9f9;
+
+  @media screen and (max-width: 768px) {
+    padding: 8px;
+  }
+
+  label {
+    @media screen and (max-width: 768px) {
+      font-size: 13px;
+    }
+  }
+}
+
+.gridWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 16px;
+  column-gap: 8px;
+}
+
+.gridFill {
+  grid-column: span 2;
+}

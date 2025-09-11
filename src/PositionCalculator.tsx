@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Home.module.scss";
 
 interface Result {
   riskAmount: number;
@@ -118,16 +118,7 @@ const PositionCalculator = () => {
         padding: "16px",
       }}
     >
-      <div
-        style={{
-          padding: "0 8px 8px",
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          direction: "ltr",
-          textAlign: "left",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
+      <div className={styles.main}>
         <h2
           style={{
             color: "#2c3e50",
