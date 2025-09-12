@@ -190,9 +190,7 @@ const PositionCalculator = () => {
             <input
               type="number"
               value={accountBalance}
-              onChange={(e) =>
-                setAccountBalance(parseFloat(e.target.value) || 0)
-              }
+              onChange={(e) => setAccountBalance(parseFloat(e.target.value))}
               style={{
                 width: "100%",
                 padding: "8px",
@@ -210,9 +208,7 @@ const PositionCalculator = () => {
             <input
               type="number"
               value={riskPercentage}
-              onChange={(e) =>
-                setRiskPercentage(parseFloat(e.target.value) || 0)
-              }
+              onChange={(e) => setRiskPercentage(parseFloat(e.target.value))}
               style={{
                 width: "100%",
                 padding: "8px",
@@ -233,7 +229,7 @@ const PositionCalculator = () => {
               type="number"
               value={inputMode === "leverage" ? leverage : margin}
               onChange={(e) => {
-                const value = parseFloat(e.target.value) || 0;
+                const value = parseFloat(e.target.value);
                 if (inputMode === "leverage") {
                   setLeverage(value);
                 } else {
@@ -256,9 +252,8 @@ const PositionCalculator = () => {
             <label>Entry Price: </label>
             <input
               type="number"
-              step="0.00001"
               value={entryPrice}
-              onChange={(e) => setEntryPrice(parseFloat(e.target.value) || 0)}
+              onChange={(e) => setEntryPrice(parseFloat(e.target.value))}
               style={{
                 width: "100%",
                 padding: "8px",
@@ -275,11 +270,8 @@ const PositionCalculator = () => {
             <label>Stop Loss Price: </label>
             <input
               type="number"
-              step="0.00001"
               value={stopLossPrice}
-              onChange={(e) =>
-                setStopLossPrice(parseFloat(e.target.value) || 0)
-              }
+              onChange={(e) => setStopLossPrice(parseFloat(e.target.value))}
               style={{
                 width: "100%",
                 padding: "8px",
