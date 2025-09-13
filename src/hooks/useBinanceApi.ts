@@ -28,7 +28,7 @@ const useBinanceApi = () => {
       }
     } catch (error: any) {
       console.error("Error fetching binance market price:", error);
-      throw new Error(error);
+      return error;
     }
   };
 

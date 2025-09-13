@@ -1,7 +1,20 @@
 import { useEffect, useState } from "react";
+import { Sparkles } from "lucide-react";
+
 import { useCalculateContext } from "./CalculateContext";
 import useBinanceApi from "./hooks/useBinanceApi";
 import useAnalyzeWithAi from "./hooks/useAnalyzeWithAi";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 type AnalysisState = "idle" | "uploading" | "analyzing" | "done" | "error";
 
@@ -28,7 +41,7 @@ const AiCalculator = () => {
     }
   }, [status]);
 
-  const analyzeImage = async () => {
+  const handleAnalyze = async () => {
     setStatus("analyzing");
     setError("");
 
@@ -54,54 +67,49 @@ const AiCalculator = () => {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "500px",
-        margin: "16px auto",
-        padding: "16px",
-      }}
-    >
-      <div>
-        <label>Request: </label>
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          style={{
-            width: "100%",
-            maxWidth: "100%",
-            minWidth: "100%",
-            maxHeight: "300px",
-            minHeight: "200px",
-            padding: "8px",
-            marginTop: "5px",
-            boxSizing: "border-box",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-          }}
-        />
-
-        <button
-          onClick={analyzeImage}
+    <Card className="border-border/50 shadow-2xl">
+      <CardHeader className="pb-4">
+        <div className="flex items-center gap-2">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Sparkles className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <CardTitle className="text-xl">AI Market Analysis</CardTitle>
+            <CardDescription>
+              Get intelligent insights powered by advanced AI algorithms
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="request" className="text-sm font-medium">
+            Market Analysis Request
+          </Label>
+          <Textarea
+            id="request"
+            placeholder="Enter your market analysis request here... (e.g., 'Analyze BTC/USD trend for the next 24 hours')"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            className="min-h-[120px] resize-none bg-input border-border/50 focus:border-primary/50 transition-colors"
+          />
+        </div>
+        <Button
+          onClick={handleAnalyze}
           disabled={status === "analyzing" || status === "uploading"}
-          style={{
-            width: "100%",
-            padding: "8px 12px",
-            borderRadius: 6,
-            border: "1px solid #111827",
-            background: "#111827",
-            color: "white",
-            cursor:
-              status === "analyzing" || status === "uploading"
-                ? "not-allowed"
-                : "pointer",
-          }}
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          size="lg"
         >
+          <Sparkles className="h-4 w-4 mr-2" />
           {status === "analyzing" ? "Analyzing..." : "Analyze with AI"}
-        </button>
-      </div>
-
-      {error ? <div style={{ color: "#b91c1c" }}>{error}</div> : null}
-    </div>
+        </Button>
+        {error && (
+          <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+            {error}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
