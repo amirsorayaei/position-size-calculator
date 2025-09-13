@@ -2,6 +2,8 @@ import Head from "next/head";
 import { Geist, Geist_Mono } from "next/font/google";
 import styles from "@/styles/Home.module.scss";
 import PositionCalculator from "@/src/PositionCalculator";
+import AiCalculator from "@/src/AiCalculator";
+import { CalculateProvider } from "@/src/CalculateContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +30,10 @@ export default function Home() {
       <div
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
-        <PositionCalculator />
+        <CalculateProvider>
+          <AiCalculator />
+          <PositionCalculator />
+        </CalculateProvider>
       </div>
     </>
   );
