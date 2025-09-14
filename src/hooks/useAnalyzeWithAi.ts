@@ -49,7 +49,7 @@ const useAnalyzeWithAi = () => {
       const value: IOpenAiResult = JSON.parse(assistant_reply);
       return value;
     } catch (err: unknown) {
-      throw new Error(err);
+      throw new Error(err instanceof Error ? err.message : String(err));
     }
   };
 

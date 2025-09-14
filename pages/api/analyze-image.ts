@@ -80,7 +80,7 @@ export default async function handler(
       return res.status(500).json({ error: `OpenAI error: ${errorText}` });
     }
 
-    const data = (await response.json()) as any;
+    const data = await response.json();
     // New Responses API returns an array in output[0].content[0].text for text outputs
     let resultText = "";
     try {
@@ -92,9 +92,10 @@ export default async function handler(
     if (!resultText) {
       return res.status(500).json({ error: "No text result from model" });
     }
-
     return res.status(200).json({ result: resultText });
-  } catch (err: any) {
-    return res.status(500).json({ error: err?.message || "Unexpected error" });
+  } catch (err: unknown) {
+    const errorMessage =
+      err instanceof Error ? err.message : "Unexpected error";
+    return res.status(500).json({ error: errorMessage });
   }
 }

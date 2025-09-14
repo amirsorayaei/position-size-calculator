@@ -26,9 +26,11 @@ const useBinanceApi = () => {
       } else {
         throw new Error(`API error: ${data.msg}`);
       }
-    } catch (error: any) {
-      console.error("Error fetching binance market price:", error);
-      return error;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error("An unknown error occurred");
     }
   };
 
