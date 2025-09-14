@@ -12,9 +12,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "./hooks/useIsMobile";
 
 type AnalysisState = "idle" | "uploading" | "analyzing" | "done" | "error";
 
@@ -31,6 +38,7 @@ const AiCalculator = () => {
   const { analyzeWithAi } = useAnalyzeWithAi();
   const [status, setStatus] = useState<AnalysisState>("idle");
   const [error, setError] = useState<string>("");
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (status === "done") {
@@ -67,49 +75,64 @@ const AiCalculator = () => {
   };
 
   return (
-    <Card className="border-border/50 shadow-2xl">
-      <CardHeader className="pb-4">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Sparkles className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <CardTitle className="text-xl">AI Market Analysis</CardTitle>
-            <CardDescription>
-              Get intelligent insights powered by advanced AI algorithms
-            </CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="request" className="text-sm font-medium">
-            Market Analysis Request
-          </Label>
-          <Textarea
-            id="request"
-            placeholder="Enter your market analysis request here... (e.g., 'Analyze BTC/USD trend for the next 24 hours')"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            className="min-h-[120px] resize-none bg-input border-border/50 focus:border-primary/50 transition-colors"
-          />
-        </div>
-        <Button
-          onClick={handleAnalyze}
-          disabled={status === "analyzing" || status === "uploading"}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-          size="lg"
-        >
-          <Sparkles className="h-4 w-4 mr-2" />
-          {status === "analyzing" ? "Analyzing..." : "Analyze with AI"}
-        </Button>
-        {error && (
-          <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-            {error}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <Accordion
+      type="single"
+      collapsible
+      className="w-full h-full"
+      value={isMobile ? undefined : "item-1"}
+    >
+      <AccordionItem value="item-1" className="h-full">
+        <Card className="border-border/50 shadow-2xl py-0 gap-3 h-full">
+          <AccordionTrigger className="items-center pr-4">
+            <CardHeader className="w-full pb-0 px-3 lg:px-6">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-md lg:text-xl">
+                    AI Market Analysis
+                  </CardTitle>
+                  <CardDescription className="text-xs lg:text-md">
+                    Get intelligent insights powered by advanced AI
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </AccordionTrigger>
+          <AccordionContent className="h-full">
+            <CardContent className="space-y-4 px-3 lg:px-6 h-full">
+              <div className="space-y-2">
+                <Label htmlFor="request" className="text-sm font-medium">
+                  Market Analysis Request
+                </Label>
+                <Textarea
+                  id="request"
+                  placeholder="Enter your market analysis request here..."
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  className="text-sm lg:text-md min-h-[250px] resize-none bg-input border-border/50 focus:border-primary/50 transition-colors"
+                />
+              </div>
+              <Button
+                onClick={handleAnalyze}
+                disabled={status === "analyzing" || status === "uploading"}
+                className="mt-auto w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                size="lg"
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                {status === "analyzing" ? "Analyzing..." : "Analyze with AI"}
+              </Button>
+              {error && (
+                <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+                  {error}
+                </div>
+              )}
+            </CardContent>
+          </AccordionContent>
+        </Card>
+      </AccordionItem>
+    </Accordion>
   );
 };
 

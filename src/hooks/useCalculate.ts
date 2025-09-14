@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Result {
   riskAmount: number;
@@ -97,6 +97,11 @@ export const useCalculate = () => {
       marginRequired,
       leverage: calculatedLeverage,
     });
+
+    setTimeout(() => {
+      const resultElement = window.document.getElementById("position-result");
+      resultElement?.scrollIntoView({ behavior: "smooth", inline: "end" });
+    }, 100);
   };
 
   const resetPosition = () => {
